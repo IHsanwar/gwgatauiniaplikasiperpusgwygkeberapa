@@ -57,4 +57,10 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function mainProfile()
+    {
+        $borrowings = auth()->user()->borrowings()->with('book')->get();
+        return view('profile.main-profile', compact('borrowings'));
+    }
 }

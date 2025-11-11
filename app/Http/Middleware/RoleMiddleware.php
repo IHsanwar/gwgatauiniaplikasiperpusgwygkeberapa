@@ -4,32 +4,15 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role)
     {
-        return $next($request);
-    }
-    public function adminOnly(Request $request, Closure $next): Response
-    {
-        if (!$request->user() || !$request->user()->isAdmin()) {
-            abort(403, 'Access denied');
+        if (auth()->check() && auth()->user()->role === $role) {
+            return $next($request);
         }
-        return $next($request);
+
+        abort(403, 'Akses ditolak. Hanya untuk admin.');
     }
-    public function petugasOnly(Request $request, Closure $next): Response
-    {
-        if (!$request->user() || !$request->user()->isPetugas()) {
-            abort(403, 'Access denied');
-        }
-        return $next($request);
-    }
-    
 }

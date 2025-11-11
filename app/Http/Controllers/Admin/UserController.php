@@ -19,4 +19,10 @@ public function toggleRole(User $user)
     $user->update(['role' => $newRole]);
     return back()->with('success', 'Peran pengguna diperbarui.');
 }
+public function edit($id)
+{
+    $user = User::findOrFail($id);
+    return view('users.edit', compact('user'));
+}
+
 }
