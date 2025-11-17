@@ -3,6 +3,47 @@
 @section('content')
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
     <h1 class="text-2xl font-bold text-gray-800 mb-6"><i class="bi bi-book-half"></i> Koleksi buku kami</h1>
+   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+    <!-- Form Search Buku -->
+    <form action="{{ route('books.search') }}" method="POST" class="w-full">
+        @csrf
+        <div class="flex gap-2">
+            <input 
+                type="text" 
+                name="query"  
+                placeholder="Cari buku berdasarkan judul atau penulis..."
+                class="px-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value="{{ request('query') }}"
+            >
+            <button 
+                type="submit" 
+                class="px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-sm transition">
+                Cari
+            </button>
+        </div>
+    </form>
+
+    <!-- Form Pinjam Buku via ISBN -->
+    <form action="{{ route('borrow.by.isbn') }}" method="POST" class="w-full">
+        @csrf
+        <div class="flex gap-2">
+            <input 
+                type="text" 
+                name="isbn"  
+                placeholder="Masukkan ISBN buku..."
+                class="px-4 py-3 border border-gray-300 rounded-lg w-full focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            >
+            <button 
+                type="submit" 
+                class="px-5 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-sm transition">
+                Pinjam
+            </button>
+        </div>
+    </form>
+
+</div>
+
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @foreach($books as $book)
@@ -50,4 +91,28 @@
         @endforeach
     </div>
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: "{{ session('success') }}",
+            confirmButtonColor: '#3085d6',
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: "{{ session('error') }}",
+            confirmButtonColor: '#d33',
+        });
+    @endif
+</script>
+
 @endsection

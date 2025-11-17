@@ -43,16 +43,28 @@
                             <td class="px-6 py-4 text-center">
                                 @if($user->role === 'admin')
                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Admin</span>
+                                @elseif ($user->role === 'petugas')
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">Petugas</span>
+                                
                                 @else
                                     <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">User</span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-center">{{ $user->created_at->format('d M Y') }}</td>
                             <td class="px-6 py-4 text-right">
-                                <a href="{{ route('users.edit', $user->id) }}" 
+                                <a href="{{ route('admin.users.edit', $user->id) }}" 
                                    class="inline-block px-3 py-1 text-sm text-blue-600 border border-blue-500 rounded-md hover:bg-blue-50 transition">
                                     Edit
                                 </a>
+                                <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" 
+                                            class="inline-block px-3 py-1 text-sm text-red-600 border border-red-500 rounded-md hover:bg-red-50 transition"
+                                            onclick="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');">
+                                        Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

@@ -7,7 +7,7 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h2 class="text-3xl font-semibold text-gray-800">{{ Auth::user()->name }}</h2>
-                <p class="text-gray-600 text-sm mt-1">{{ Auth::user()->email }}</p>
+                <p class="text-gray-600 text-sm mt-1">{{ Auth::user()->role }}</p>
             </div>
             <a href="{{ route('profile.edit') }}" 
                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow transition">
@@ -75,6 +75,7 @@
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
                                             Dipinjam
                                         </span>
+                                    
 
                                         <!-- Tombol Kembalikan Buku -->
                                         <form action="{{ route('borrowings.requestReturn', $borrowing) }}" method="POST" class="inline-block mt-2">

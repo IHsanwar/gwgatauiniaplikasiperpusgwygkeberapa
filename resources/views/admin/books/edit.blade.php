@@ -16,19 +16,19 @@
         </div>
     @endif
 
-    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
-
+        @method('PUT')
         <div>
             <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
-            <input id="title" name="title" type="text" value="{{ old('title') }}"
+            <input id="title" name="title" type="text" value="{{ old('title', $book->title) }}"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
             @error('title') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label for="author" class="block text-sm font-medium text-gray-700">Pengarang</label>
-            <input id="author" name="author" type="text" value="{{ old('author') }}"
+            <input id="author" name="author" type="text" value="{{ old('author', $book->author) }}"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
             @error('author') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
@@ -36,7 +36,7 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
-                <input id="isbn" name="isbn" type="text" value="{{ old('isbn') }}"
+                <input id="isbn" name="isbn" type="text" value="{{ old('isbn', $book->isbn) }}"
                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
                 @error('isbn') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
             </div>

@@ -30,7 +30,7 @@
                 <div class="flex items-center space-x-4">
                     @auth
                         <span class="hidden md:inline text-sm font-medium">
-                            Hi, {{ Auth::user()->name }}
+                            Hi,<a href="{{ route('profile.main') }}"> {{ Auth::user()->name }}</a>
                         </span>
 
                         @if(Auth::user()->role === 'admin')
@@ -38,6 +38,12 @@
                                class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-full shadow">
                                 Admin Panel
                             </a>
+                        @elseif(Auth::user()->role === 'petugas')
+                            <a href="{{ route('petugas.dashboard') }}" 
+                               class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-full shadow">
+                                Petugas Panel
+                            </a>
+                       
                         @endif
 
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -61,7 +67,8 @@
             </div>
         </div>
     </nav>
-
+    <div class="flex flex-1">
+    
     <!-- Main Content -->
     <main class="flex-grow mt-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,7 +92,7 @@
         @yield('content')
         </div>
     </main>
-
+</div>
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 mt-8 py-6">
         <div class="max-w-7xl mx-auto px-4 text-center text-gray-600 text-sm">

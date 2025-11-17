@@ -10,6 +10,8 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Tailwind CSS (via Vite) -->
      @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -87,8 +89,12 @@
                         <i class="bi bi-person mr-2"></i>
                         Profil
                     </a>
-                    
-                    <a href="{{ route('books.index') }}" 
+                    <a href="{{ route('admin.books.index') }}" 
+                       class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('borrowings.userBorrowedBooks') ? 'bg-red-600' : '' }}">
+                        <i class="bi bi-journal-bookmark mr-2"></i>
+                        Buku Dipinjam
+                    </a>
+                    <a href="{{ route('dashboard') }}" 
                        class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('books.*') ? 'bg-red-600' : '' }}">
                         <i class="bi bi-book mr-2"></i>
                         Daftar Buku
@@ -126,7 +132,6 @@
 
 
     <!-- Bootstrap Icons via CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+    
 </body>
 </html>

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Borrowing;
 class BookController extends Controller
 {
     //
@@ -46,52 +47,116 @@ class BookController extends Controller
 
     $imageUrl = null;
 
-    // Jika ada file gambar, simpan ke storage/public/books
     if ($request->hasFile('image')) {
+        // simpan file ke storage/app/public/books
         $path = $request->file('image')->store('books', 'public');
+        
+        // simpan URL lengkap
         $imageUrl = asset('storage/' . $path);
     }
 
-    // Simpan data buku
     Book::create([
         'title' => $request->title,
         'author' => $request->author,
         'isbn' => $request->isbn,
         'stock' => $request->stock,
-        'image_url' => $imageUrl, // simpan URL ke kolom ini
+        'image_url' => $imageUrl,
     ]);
 
-    return redirect()->route('books.index')->with('success', 'Buku berhasil ditambahkan.');
+    return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan.');
 }
+
 
     public function editBook(Book $book)
     {
-        return view('books.edit', compact('book'));
+        return view('admin.books.edit', compact('book'));
     }
     public function updateBook(Request $request, Book $book)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'isbn' => 'required|string|max:13|unique:books,isbn,' . $book->id,
-            'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|max:2048',
-        ]);
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'author' => 'required|string|max:255',
+        'isbn' => 'required|string|max:13|unique:books,isbn,' . $book->id,
+        'stock' => 'required|integer|min:0',
+        'image' => 'nullable|image|max:2048',
+    ]);
 
-        $book->update($request->only('title', 'author', 'isbn', 'stock'));
+    // Perbarui data teks
+    $book->update($request->only('title', 'author', 'isbn', 'stock'));
 
-        if ($request->hasFile('image')) {
-            $book->clearMediaCollection('images');
-            $book->addMedia($request->file('image'))->toMediaCollection('images');
+    // Jika ada gambar baru
+    if ($request->hasFile('image')) {
+
+        // Hapus gambar lama berdasarkan URL
+        if ($book->image_url) {
+            $oldPath = str_replace(asset('storage/') . '/', '', $book->image_url);
+
+            if (Storage::disk('public')->exists($oldPath)) {
+                Storage::disk('public')->delete($oldPath);
+            }
         }
 
-        return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui.');
+        // Upload gambar baru
+        $newPath = $request->file('image')->store('books', 'public');
+
+        // Simpan URL baru
+        $book->update([
+            'image_url' => asset('storage/' . $newPath)
+        ]);
     }
+
+    return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diperbarui.');
+}
+
+
+
 
     public function deleteBook(Book $book)
     {
         $book->clearMediaCollection('images');
         $book->delete();
-        return redirect()->route('books.index')->with('success', 'Buku berhasil dihapus.');
+        return redirect()->route('admin.books.index')->with('success', 'Buku berhasil dihapus.');
     }
+
+        public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $books = Book::where('title', 'like', "%$query%")
+                    ->orWhere('author', 'like', "%$query%")
+                    ->get();
+
+        return view('books.index', compact('books'))
+            ->with('query', $query);
+    }
+
+
+    public function searchByISBN(Request $request)
+    {
+        $isbn = $request->input('isbn');
+        $book = Book::where('isbn', $isbn)->first();
+
+        if ($book) {
+            return view('books.show', compact('book'));
+        } else {
+            return redirect()->back()->with('error', 'Buku dengan ISBN tersebut tidak ditemukan.');
+        }
+    }
+    
+    public function borrowByISBN(Request $request)
+{
+    $isbn = $request->input('isbn');
+    $book = Book::where('isbn', $isbn)->first();
+
+    if (!$book) {
+        return redirect()->back()->with('error', 'Buku dengan ISBN tersebut tidak ditemukan.');
+    }
+
+    if ($book->available() <= 0) {
+        return redirect()->back()->with('error', 'Stok buku habis dan tidak bisa dipinjam.');
+    }
+
+    return redirect()->route('borrow.create', $book);
+}
+
 }

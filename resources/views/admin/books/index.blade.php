@@ -34,16 +34,10 @@
                             {{ $book->available() > 0 ? 'Tersedia' : 'Habis' }}
                         </span>
 
-                        @if($book->available() > 0)
-                            <a href="{{ route('borrow.create', $book) }}"
-                               class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition">
-                                Pinjam
+                        <a href="{{ route('admin.books.edit', $book->id) }}" 
+                           class="text-sm text-blue-600 hover:bg-blue-300 flex items-center bg-blue-50 px-2 py-1 rounded-md">
+                            <i class="bi bi-pencil-square mr-1"></i> Edit
                             </a>
-                        @else
-                            <span class="px-3 py-1.5 bg-gray-200 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed">
-                                Tidak Bisa
-                            </span>
-                        @endif
                     </div>
                 </div>
             </div>

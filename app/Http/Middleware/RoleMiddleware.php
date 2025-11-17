@@ -7,12 +7,20 @@ use Illuminate\Http\Request;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, string $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (auth()->check() && auth()->user()->role === $role) {
+        if (!auth()->check()) {
+            abort(403, 'Anda belum login.');
+        }
+
+        $userRole = auth()->user()->role;
+
+        // Jika user role ada dalam list role yang diizinkan
+        if (in_array($userRole, $roles)) {
             return $next($request);
         }
 
-        abort(403, 'Akses ditolak. Hanya untuk admin.');
+        abort(403, 'Akses ditolak untuk role: ' . $userRole);
     }
+
 }
