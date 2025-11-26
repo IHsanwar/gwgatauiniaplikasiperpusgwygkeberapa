@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
     // Borrowing flow
+    Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/books/{book}/borrow', [BorrowingController::class, 'create'])->name('borrow.create');
     Route::post('/books/{book}/borrow', [BorrowingController::class, 'store'])->name('borrow.store');
     Route::get('/borrowings/success', function () {
@@ -50,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/books/{book}/edit', [BookController::class, 'editBook'])->name('admin.books.edit');
         Route::put('/books/{book}', [BookController::class, 'updateBook'])->
         name('books.update');
-        Route::delete('/books/{book}', [BookController::class, 'destroyBook'])->name('books.destroy');
+        Route::delete('/books/{book}', [BookController::class, 'deleteBook'])->name('admin.books.destroy');
     });
     Route::middleware(['role:petugas'])->prefix('petugas')->group(function () {
         Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'accBorrowingBook'])->name('borrowings.approve');

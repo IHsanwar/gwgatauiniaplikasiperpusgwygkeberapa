@@ -71,11 +71,12 @@
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
                                             Menunggu
                                         </span>
-                                    @elseif($borrowing->status === 'borrowed')
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-                                            Dipinjam
+                                    @elseif($borrowing->status === 'pending_borrowing')
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
+                                            Sedang Menunggu
                                         </span>
                                     
+                                    @elseif($borrowing->status === 'borrowed')
 
                                         <!-- Tombol Kembalikan Buku -->
                                         <form action="{{ route('borrowings.requestReturn', $borrowing) }}" method="POST" class="inline-block mt-2">
@@ -86,6 +87,7 @@
                                                 Kembalikan Buku
                                             </button>
                                         </form>
+                                        
                                     @elseif($borrowing->status === 'pending_return')
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
                                             Menunggu Pengembalian

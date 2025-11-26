@@ -16,52 +16,85 @@
         </div>
     @endif
 
-    <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-        @csrf
+   <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    @csrf
+
+    {{-- JUDUL --}}
+    <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
+        <input id="title" name="title" type="text" value="{{ old('title') }}"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
+        @error('title') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
+
+    {{-- PENGARANG --}}
+    <div>
+        <label for="author" class="block text-sm font-medium text-gray-700">Pengarang</label>
+        <input id="author" name="author" type="text" value="{{ old('author') }}"
+               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
+        @error('author') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
+
+    {{-- ISBN & STOK --}}
+    <div class="grid grid-cols-2 gap-4">
 
         <div>
-            <label for="title" class="block text-sm font-medium text-gray-700">Judul</label>
-            <input id="title" name="title" type="text" value="{{ old('title') }}"
+            <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
+            <input id="isbn" name="isbn" type="text" value="{{ old('isbn') }}"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
-            @error('title') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            @error('isbn') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
         <div>
-            <label for="author" class="block text-sm font-medium text-gray-700">Pengarang</label>
-            <input id="author" name="author" type="text" value="{{ old('author') }}"
+            <label for="stock" class="block text-sm font-medium text-gray-700">Stok (offline)</label>
+            <input id="stock" name="stock" type="number" min="0" value="{{ old('stock', 1) }}"
                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
-            @error('author') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            @error('stock') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label for="isbn" class="block text-sm font-medium text-gray-700">ISBN</label>
-                <input id="isbn" name="isbn" type="text" value="{{ old('isbn') }}"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
-                @error('isbn') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
+    </div>
 
-            <div>
-                <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
-                <input id="stock" name="stock" type="number" min="0" value="{{ old('stock', 1) }}"
-                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-red-500 focus:border-red-500" required>
-                @error('stock') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-            </div>
-        </div>
+    {{-- ONLINE BOOK OPTION --}}
+    <div class="space-y-2">
+        <label for="is_online" class="block text-sm font-medium text-gray-700">
+            Tersedia Versi Online?
+        </label>
 
-        <div>
-            <label for="image" class="block text-sm font-medium text-gray-700">Gambar Sampul (opsional)</label>
-            <input id="image" name="image" type="file" accept="image/*"
+        <input id="is_online" name="is_online" type="checkbox" value="1"
+               class="h-4 w-4 text-red-600 border-gray-300 rounded"
+               @checked(old('is_online'))>
+
+        {{-- FILE PDF --}}
+        <div class="pt-2">
+            <label for="file" class="block text-sm font-medium text-gray-700">
+                Upload File PDF (opsional)
+            </label>
+
+            <input id="file" name="file" type="file" accept="application/pdf"
                    class="mt-1 block w-full text-sm text-gray-600 file:bg-red-500 file:text-white file:py-2 file:px-3 file:rounded-md">
-            @error('image') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
-        </div>
 
-        <div class="flex items-center justify-end space-x-3">
-            <a href="{{ route('admin.books.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">Batal</a>
-            <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow">
-                Simpan Buku
-            </button>
+            @error('file_url') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
-    </form>
+    </div>
+
+    {{-- COVER BUKU --}}
+    <div>
+        <label for="image" class="block text-sm font-medium text-gray-700">Gambar Sampul (opsional)</label>
+        <input id="image" name="image" type="file" accept="image/*"
+               class="mt-1 block w-full text-sm text-gray-600 file:bg-red-500 file:text-white file:py-2 file:px-3 file:rounded-md">
+        @error('image') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+    </div>
+
+    {{-- ACTION --}}
+    <div class="flex items-center justify-end space-x-3">
+        <a href="{{ route('admin.books.index') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+            Batal
+        </a>
+        <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md shadow">
+            Simpan Buku
+        </button>
+    </div>
+</form>
+
 </div>
 @endsection

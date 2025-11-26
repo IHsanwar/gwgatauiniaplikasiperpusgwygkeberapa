@@ -17,7 +17,7 @@
 <body class="font-sans bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Navbar -->
-    <nav class="bg-gradient-to-r from-orange-600 to-indigo-700 text-white shadow-md">
+    <nav class="bg-gradient-to-r from-red-600 to-orange-300 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -32,7 +32,9 @@
                         <span class="hidden md:inline text-sm font-medium">
                             Hi,<a href="{{ route('profile.main') }}"> {{ Auth::user()->name }}</a>
                         </span>
-
+                        <a href="{{ route('profile.main') }}" class="text-white hover:text-gray-200">
+                            <i class="bi bi-person-circle text-2xl"></i>
+                        </a>
                         @if(Auth::user()->role === 'admin')
                             <a href="{{ route('admin.users.index') }}" 
                                class="px-3 py-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-full shadow">
@@ -43,7 +45,7 @@
                                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-full shadow">
                                 Petugas Panel
                             </a>
-                       
+
                         @endif
 
                         <form method="POST" action="{{ route('logout') }}" class="inline">
@@ -96,7 +98,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 mt-8 py-6">
         <div class="max-w-7xl mx-auto px-4 text-center text-gray-600 text-sm">
-            &copy; {{ date('Y') }} Perpustakaan Online. All rights reserved.
+            &copy; {{ date('Y') }} Perpustakaan Online. Kelompok 4.
             <div class="mt-1">
                 <span class="inline-block w-2 h-2 bg-blue-500 rounded-full mx-1"></span>
                 <span class="inline-block w-2 h-2 bg-emerald-500 rounded-full mx-1"></span>

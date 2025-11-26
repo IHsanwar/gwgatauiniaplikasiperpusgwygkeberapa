@@ -85,9 +85,9 @@
                         <th class="px-4 py-3 w-40">Buku</th>
                         <th class="px-4 py-3 w-48">Pemohon</th>
                         <th class="px-4 py-3 w-36 text-center">Tanggal Pinjam</th>
-                        <th class="px-4 py-3 w-34 text-center">Jatuh Tempo</th>
-                        <th class="px-4 py-3 w-30 text-center">Status</th>
-                        <th class="px-4 py-3 w-44 text-center">Aksi</th>
+                        <th class="px-4 py-3 w-36 text-center">Jatuh Tempo</th>
+                        <th class="px-4 py-3 w-32 text-center">Status</th>
+                        <th class="px-4 py-3 w-40 text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -98,15 +98,15 @@
                             <!-- Book title with image and truncation -->
                             <td class="px-4 py-3 align-middle">
                                 <div class="flex items-center gap-3">
-                                   <!--  <div class="w-12 h-16 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
+                                    <div class="w-12 h-16 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                                         @if($borrowing->book->image_url)
                                             <img src="{{ $borrowing->book->image_url }}" alt="{{ $borrowing->book->title }}" class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full flex items-center justify-center text-gray-400">
                                                 <i class="bi bi-book"></i>
                                             </div>
-                                        @endif 
-                                    </div>-->
+                                        @endif
+                                    </div>
                                     <div class="truncate max-w-[160px]" title="{{ $borrowing->book->title ?? '-' }}">
                                         {{ \Illuminate\Support\Str::limit($borrowing->book->title ?? '-', 8, '...') }}
                                         <div class="text-xs text-gray-500">{{ \Illuminate\Support\Str::limit($borrowing->book->author ?? '-', 12, '...') }}</div>
@@ -179,13 +179,13 @@
                 <div class="border rounded-lg p-4 flex justify-between items-start gap-4 h-36">
                     <div class="flex-shrink-0 w-20">
                         <div class="w-20 h-28 bg-gray-100 rounded overflow-hidden">
-                    <!--        @if($borrowing->book->image_url)
+                            @if($borrowing->book->image_url)
                                 <img src="{{ $borrowing->book->image_url }}" alt="{{ $borrowing->book->title }}" class="w-full h-full object-cover">
-                            @else -->
+                            @else
                                 <div class="w-full h-full flex items-center justify-center text-gray-400">
                                     <i class="bi bi-book"></i>
                                 </div>
-                          <!--  @endif -->
+                            @endif
                         </div>
                     </div>
 
@@ -233,27 +233,12 @@
         </div>
 
         <!-- Pagination -->
-        
-    {{-- PAGINATION INFO + LINKS --}}
-    <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3">
-
-        {{-- INFO --}}
-        <p class="text-sm text-gray-500">
-            Menampilkan 
-            <span class="font-semibold">{{ $borrowings->firstItem() ?: 0 }}</span>
-            -
-            <span class="font-semibold">{{ $borrowings->lastItem() ?: 0 }}</span>
-            dari 
-            <span class="font-semibold">{{ $borrowings->total() }}</span> data
-        </p>
-
-        {{-- PAGINATION LINKS --}}
-        <div class="pagination-area">
-            {{ $borrowings->onEachSide(1)->withQueryString()->links('vendor.pagination.tailwind-custom') }}
+        <div class="mt-4 flex items-center justify-between">
+            <p class="text-sm text-gray-500">Menampilkan {{ $borrowings->firstItem() ?: 0 }} - {{ $borrowings->lastItem() ?: 0 }} dari {{ $borrowings->total() }}</p>
+            <div>
+                {{ $borrowings->withQueryString()->links() }}
+            </div>
         </div>
-    </div>
-
-
     @endif
 </div>
 @endsection

@@ -15,7 +15,26 @@ public function create(Book $book)
     if ($book->available() <= 0) {
         abort(403, 'Buku tidak tersedia');
     }
-    return view('borrowings.create', compact('book'));
+    $curentlyBorrowedByMany = Borrowing::where('book_id', $book->id)
+        ->where('user_id', auth()->id())
+        ->whereIn('status', ['pending_borrowing', 'borrowed', 'pending_return'])
+        ->count();
+    return view('borrowings.create', compact('book','curentlyBorrowedByMany'));
+}
+
+    public function accBorrowingBook(Borrowing $borrowing)
+{
+    $borrowing->update([
+        'status' => 'borrowed',
+        'borrowed_at' => now(),
+        'due_at' => now()->addDays(14),
+    ]);
+
+    $book = $borrowing->book;
+    $book->decrement('stock');
+
+    return redirect()->route('petugas.dashboard')
+        ->with('success', 'Peminjaman disetujui.');
 }
 
 public function store(Request $request, Book $book)
@@ -34,21 +53,6 @@ public function store(Request $request, Book $book)
 
     return redirect()->route('dashboard')->with('success', 'Permintaan peminjaman berhasil dikirim.');
 }
-
-    public function accBorrowingBook(Borrowing $borrowing)
-    {
-        $borrowing->update([
-            'status' => 'borrowed',
-            'borrowed_at' => now(),
-            'due_at' => now()->addDays(14)
-        ]);
-
-        $book = $borrowing->book;
-        $book->decrement('stock');
-
-        return redirect()->route('petugas.dashboard')->with('success', 'Peminjaman disetujui.');
-    }
-
 
 
     public function showReturn()

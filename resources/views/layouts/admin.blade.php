@@ -19,7 +19,7 @@
 <body class="font-sans bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Navbar -->
-    <nav class="bg-gradient-to-r from-red-600 to-indigo-700 text-white shadow-md">
+    <nav class="bg-gradient-to-r from-red-600 to-orange-300 text-white shadow-md">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
@@ -65,9 +65,9 @@
     </nav>
 
     <!-- Main Layout dengan Sidebar -->
-    <div class="flex flex-1">
+    <div class="flex flex-1 ">
         <!-- Sidebar -->
-        <aside class="w-48 bg-red-500 text-white shadow-lg">
+        <aside class="w-64 bg-red-500 text-white shadow-lg">
             <div class="p-6">
                 <!-- Profile Section -->
                 <div class="flex flex-col items-center mb-8">
@@ -76,32 +76,62 @@
                 </div>
 
                 <!-- Menu -->
-                <nav class="space-y-2">
-                    <a href="{{ route('dashboard') }}" 
-                       class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('dashboard') ? 'bg-red-600' : '' }}">
-                        <i class="bi bi-house-door mr-2"></i>
-                        Beranda
-                    </a>
-                    
-                    @auth
-                    <a href="{{ route('profile.main') }}" 
-                       class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('profile.*') ? 'bg-red-600' : '' }}">
-                        <i class="bi bi-person mr-2"></i>
-                        Profil
-                    </a>
-                    <a href="{{ route('admin.books.index') }}" 
-                       class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('borrowings.userBorrowedBooks') ? 'bg-red-600' : '' }}">
-                        <i class="bi bi-journal-bookmark mr-2"></i>
-                        Buku Dipinjam
-                    </a>
-                    <a href="{{ route('dashboard') }}" 
-                       class="block px-4 py-2 rounded hover:bg-red-600 transition {{ request()->routeIs('books.*') ? 'bg-red-600' : '' }}">
-                        <i class="bi bi-book mr-2"></i>
-                        Daftar Buku
-                    </a>
-                    
-                    @endauth
-                </nav>
+            <nav class="space-y-2">
+
+                <!-- Dashboard -->
+                <a href="{{ route('dashboard') }}" 
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('dashboard') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-house-door mr-2"></i>
+                    Beranda
+                </a>
+
+                @auth
+                <!-- Profil -->
+                <a href="{{ route('profile.main') }}" 
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('profile.*') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-person mr-2"></i>
+                    Profil
+                </a>
+
+                <!-- Manajemen Buku -->
+                <a href="{{ route('admin.books.index') }}" 
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('admin.books.*') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-journal-bookmark mr-2"></i>
+                    Manajemen buku
+                </a>
+
+                <!-- Daftar Buku -->
+                <a href="{{ route('dashboard') }}" 
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('books.*') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-book mr-2"></i>
+                    Daftar Buku
+                </a>
+
+                <!-- Panel Petugas / Admin -->
+                @if (Auth::user()->role == 'petugas')
+                <a href="{{ route('petugas.dashboard') }}" 
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('petugas.*') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-people-fill mr-2"></i>
+                    Panel Petugas
+                </a>
+                @elseif (Auth::user()->role == 'admin')
+                <a href="{{ route('admin.users.index') }}"
+                class="block px-4 py-2 rounded hover:bg-red-600 transition 
+                        {{ request()->routeIs('admin.users.*') ? 'bg-red-600' : '' }}">
+                    <i class="bi bi-people-fill mr-2"></i>
+                    Panel Petugas
+                </a>
+                @endif
+
+                @endauth
+
+            </nav>
+
             </div>
         </aside>
 

@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Book extends Model
 {
@@ -18,15 +16,30 @@ class Book extends Model
         'isbn',
         'stock',
         'image_url',
+        'is_online',
+        'file_url',
+
     ];
 
     public function borrowings()    
 {
     return $this->hasMany(Borrowing::class);
 }
+    public function available()
+    {
+        if ($this->is_online) {
+            return 'Online'; 
+        }
 
-public function available()
-{
-    return $this->stock - $this->borrowings()->where('status', '!=', 'returned')->count();
-}
+        return $this->stock - $this->borrowings()
+            ->where('status', '!=', 'returned')
+            ->count();
+    }
+
+    
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('ebook')
+             ->singleFile();
+    }
 }
