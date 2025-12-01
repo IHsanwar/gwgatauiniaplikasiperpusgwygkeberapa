@@ -133,6 +133,11 @@ public function store(Request $request, Book $book)
     return Excel::download(new \App\Exports\BorrowingsExport, 'laporan_peminjaman.xlsx');
 }
 
-
+    public function deleteMany(Request $request)
+    {
+        $ids = $request->ids; // array of IDs to delete
+        Borrowing::whereIn('id', $ids)->delete();
+        return back()->with('success', 'Data peminjaman berhasil dihapus.');
+    }
 
 }

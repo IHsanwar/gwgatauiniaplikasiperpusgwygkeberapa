@@ -11,12 +11,11 @@ Route::get('/', function () {
 Route::post('/books/search', [BookController::class, 'search'])->name('books.search');
 
 Route::post('/borrow/isbn', [BookController::class, 'borrowByISBN'])->name('borrow.by.isbn');
-
+Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
       // Book browsing
 
-    Route::get('/dashboard', [BookController::class, 'index'])->name('dashboard');
     // Borrowing flow
     Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
     Route::get('/books/{book}/borrow', [BorrowingController::class, 'create'])->name('borrow.create');
@@ -54,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/books/{book}', [BookController::class, 'deleteBook'])->name('admin.books.destroy');
     });
     Route::middleware(['role:petugas'])->prefix('petugas')->group(function () {
+        Route::post('/borrowings/delete-many', [BorrowingController::class, 'deleteMany'])->name('borrowings.deleteMany');
         Route::post('/borrowings/{borrowing}/approve', [BorrowingController::class, 'accBorrowingBook'])->name('borrowings.approve');
         Route::post('/borrowings/{borrowing}/return', [BorrowingController::class, 'accReturnBook'])->name('borrowings.return');
         Route::get('/dashboard', [BorrowingController::class, 'index'])->name('petugas.dashboard');

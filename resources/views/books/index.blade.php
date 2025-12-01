@@ -7,14 +7,11 @@
     <div class="mb-8">
         <div class="flex items-center justify-between mb-2">
             <h1 class="text-3xl font-bold text-gray-800 flex items-center">
-                <i class="bi bi-book-half text-indigo-600 me-3"></i> 
+                <i class="bi bi-book-half text-red-600 me-3"></i> 
                 Koleksi Buku Kami
             </h1>
             <div class="flex items-center space-x-4">
-                <a href="{{ route('profile.main') }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition">
-                    <i class="bi bi-arrow-left me-2"></i>
-                    <span>Cek profil dan buku yang kamu pinjam</span>
-                </a>
+                
             </div>
             <div class="text-sm text-gray-500">
                 <i class="bi bi-collection-fill me-1"></i>
@@ -168,14 +165,31 @@
 
                     <!-- Action Buttons -->
                     <div class="mt-auto space-y-2">
-                        @if($book->is_online)
-                            <a href="{{ asset($book->file_url) }}" 
-                               target="_blank" 
-                               class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition duration-200 flex items-center justify-center">
-                                <i class="bi bi-book-half me-2"></i>
-                                Baca Online
-                            </a>
-                        @endif
+                       @if ($book->is_online)
+
+    @auth
+        <!-- User sudah login: tampilkan tombol Baca Online -->
+        <a href="{{ asset($book->file_url) }}" 
+           target="_blank" 
+           class="w-full px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white text-sm font-medium rounded-lg shadow-sm transition duration-200 flex items-center justify-center">
+            <i class="bi bi-book-half me-2"></i>
+            Baca Online
+        </a>
+    @endauth
+
+    @guest
+        <!-- User belum login: tampilkan peringatan -->
+        <div class="w-full px-4 py-3 bg-red-100 text-red-800 rounded-lg border border-red-300 text-sm flex items-start gap-2">
+            <i class="bi bi-exclamation-triangle-fill text-red-600 text-xl"></i>
+            <div>
+                <p class="font-semibold">Login untuk membaca buku online.</p>
+                
+            </div>
+        </div>
+    @endguest
+
+@endif
+
                         
                         @if($book->available() > 0)
                             <a href="{{ route('borrow.create', $book) }}"

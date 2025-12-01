@@ -102,11 +102,11 @@
                         type="date" 
                         name="borrowed_at" 
                         value="{{ now()->format('Y-m-d') }}" 
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" readonly
                         required>
                     <p class="text-xs text-gray-500 mt-1">
                         <i class="bi bi-info-circle me-1"></i>
-                        Tanggal mulai peminjaman buku
+                        Tanggal mulai peminjaman buku (Hari ini)
                     </p>
                 </div>
 
@@ -121,7 +121,7 @@
                         name="due_at" 
                         value="{{ now()->addDays(7)->format('Y-m-d') }}" 
                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition" 
-                        required>
+                        required readonly>
                     <p class="text-xs text-gray-500 mt-1">
                         <i class="bi bi-info-circle me-1"></i>
                         Batas waktu pengembalian (7 hari dari tanggal pinjam)

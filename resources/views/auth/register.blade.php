@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Perpustakaan') }}</title>
+    <title>{{ config('app.name', 'Digital') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -23,7 +23,7 @@
                 <div class="mb-8">
                     <i class="bi bi-bookshelf text-6xl mb-4 block"></i>
                 </div>
-                <h1 class="text-4xl font-bold mb-4">Perpustakaan Online</h1>
+                <h1 class="text-4xl font-bold mb-4">Digital Online</h1>
                 <img class="center mx-2 h-64 rounded-lg" src="https://www.creativefabrica.com/wp-content/uploads/2020/09/17/Book-Logo-Graphics-5535886-1.jpg">
                 <p class="text-lg text-red-100 mb-6">Jelajahi koleksi buku digital terlengkap</p>
             </div>
@@ -35,7 +35,7 @@
                 <!-- Header -->
                 <div class="mb-8 text-center lg:text-left">
                     <h2 class="text-3xl font-bold text-gray-800 mb-2">Daftar</h2>
-                    <p class="text-gray-600">Buat akun baru di Perpustakaan Online</p>
+                    <p class="text-gray-600">Buat akun baru di Digital Online</p>
                 </div>
 
                 <form method="POST" action="{{ route('register') }}" class="space-y-6">
@@ -119,7 +119,7 @@
                 <!-- Divider -->
                 <div class="mt-8 pt-6 border-t border-gray-200">
                     <p class="text-center text-xs text-gray-500">
-                        &copy; {{ date('Y') }} Perpustakaan Online. Semua hak dilindungi.
+                        &copy; {{ date('Y') }} Digital Online. Semua hak dilindungi.
                     </p>
                 </div>
             </div>

@@ -30,10 +30,7 @@
     <!-- Borrowed Books Section -->
     <div class="bg-white shadow-md rounded-lg p-8">
         <h3 class="text-2xl font-semibold text-gray-800 mb-6">Buku yang Dipinjam</h3>
-    <button class="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            onclick="alert('Fitur pengembalian buku belum tersedia.');">
-        Kembalikan Buku
-    </button>
+    
         @if($borrowings->isEmpty())
             <p class="text-gray-600 text-center py-8">Anda belum meminjam buku apapun.</p>
         @else

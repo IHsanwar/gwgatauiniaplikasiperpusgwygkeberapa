@@ -72,15 +72,27 @@
             <h3 class="text-2xl font-bold text-blue-600">{{ $pendingReturn }}</h3>
         </div>
     </div>
-
+    <!-- Borrowings Table -->
     @if($borrowings->isEmpty())
         <p class="text-gray-600 text-center"><i class="bi bi-x-octagon"></i> Tidak ada permintaan peminjaman.</p>
     @else
+    <!--Delete many toggle -->
+    <form id="deleteManyForm" action="{{ route('borrowings.deleteMany') }}" method="POST">
+        @csrf
+        <div class="mb-4">
+            <button type="submit" id="deleteManyBtn" disabled class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                <i class="bi bi-trash3"></i> Hapus Data Terpilih
+            </button>
+        </div>
         <!-- Desktop / md+ Table -->
         <div class="hidden md:block overflow-x-auto rounded-lg border border-gray-200">
             <table class="w-full text-sm text-left text-gray-600 table-fixed">
                 <thead class="bg-gray-100 text-gray-700 text-xs uppercase">
                     <tr>
+                        <th class="px-4 py-3 w-12 text-center">
+                            <input type="checkbox" id="checkAll" class="w-4 h-4">
+                        </th>
+
                         <th class="px-4 py-3 w-12">#</th>
                         <th class="px-4 py-3 w-40">Buku</th>
                         <th class="px-4 py-3 w-48">Pemohon</th>
@@ -93,9 +105,14 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach($borrowings as $i => $borrowing)
                         <tr class="hover:bg-gray-50 h-20">
+                            <!-- Checkbox column (matches header) -->
+                            <td class="px-4 py-3 text-center align-middle">
+                                <input type="checkbox" name="ids[]" value="{{ $borrowing->id }}" class="rowCheckbox w-4 h-4">
+                            </td>
+
+                            <!-- Index -->
                             <td class="px-4 py-3 align-middle">{{ $borrowings->firstItem() ? $borrowings->firstItem() + $i : $i + 1 }}</td>
 
-                            <!-- Book title with image and truncation -->
                             <td class="px-4 py-3 align-middle">
                                 <div class="flex items-center gap-3">
                                     <div class="w-12 h-16 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
@@ -245,7 +262,63 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    // APPROVE BORROWING
+    const checkAll = document.getElementById("checkAll");
+    const deleteForm = document.getElementById("deleteManyForm");
+    const deleteBtn = document.getElementById("deleteManyBtn");
+
+    function rowCheckboxes() {
+        return Array.from(document.querySelectorAll(".rowCheckbox"));
+    }
+
+    function updateDeleteButton() {
+        const checkedCount = rowCheckboxes().filter(cb => cb.checked).length;
+        deleteBtn.disabled = checkedCount === 0;
+    }
+
+    // Toggle all rows from header checkbox
+    if (checkAll) {
+        checkAll.addEventListener("change", () => {
+            rowCheckboxes().forEach(cb => cb.checked = checkAll.checked);
+            updateDeleteButton();
+        });
+    }
+
+    // Individual row checkbox change handler (delegated)
+    document.addEventListener("change", (e) => {
+        if (e.target && e.target.classList && e.target.classList.contains("rowCheckbox")) {
+            const all = rowCheckboxes();
+            const allChecked = all.length > 0 && all.every(cb => cb.checked);
+            if (checkAll) checkAll.checked = allChecked;
+            updateDeleteButton();
+        }
+    });
+
+    // Confirm before bulk delete
+    if (deleteForm) {
+        deleteForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const selected = rowCheckboxes().filter(cb => cb.checked).map(cb => cb.value);
+            if (!selected.length) {
+                return;
+            }
+
+            Swal.fire({
+                title: 'Hapus data terpilih?',
+                text: `Akan menghapus ${selected.length} item.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, hapus'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteForm.submit();
+                }
+            });
+        });
+    }
+
+    // Approval / return buttons (existing handlers)
     document.querySelectorAll('.btn-approve').forEach(btn => {
         btn.addEventListener('click', function() {
             const title = this.dataset.title;
@@ -279,7 +352,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // RETURN BORROWING
     document.querySelectorAll('.btn-return').forEach(btn => {
         btn.addEventListener('click', function() {
             const url = this.dataset.url;
@@ -311,5 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     });
+
 });
 </script>

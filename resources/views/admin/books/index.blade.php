@@ -6,7 +6,7 @@
     <h1 class="text-2xl font-bold text-gray-800 mb-6"><i class="bi bi-book-half"></i> Manajemen koleksi buku saat ini</h1>
     <div class="mb-4 flex justify-between items-center">
         <a href="{{ route('admin.books.create') }}" 
-           class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded shadow">
+           class="px-4 py-2 bg-red-600 hover:bg-white hover:text-red-600 hover:border-red-600 border transition text-white font-medium rounded shadow">
             <i class="bi bi-plus-lg mr-1"></i> Tambah Buku Baru</a>
         </div>
     </div>

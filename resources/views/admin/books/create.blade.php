@@ -54,9 +54,9 @@
 
     </div>
 
-    {{-- ONLINE BOOK OPTION --}}
+    {{-- Online BOOK OPTION --}}
     <div class="space-y-2">
-        <label for="is_online" class="block text-sm font-medium text-gray-700">
+        <label for="is_Online" class="block text-sm font-medium text-gray-700">
             Tersedia Versi Online?
         </label>
 
@@ -65,16 +65,16 @@
                @checked(old('is_online'))>
 
         {{-- FILE PDF --}}
-        <div class="pt-2">
+        <div id="pdfUploadWrapper" class="pt-2 hidden">
             <label for="file" class="block text-sm font-medium text-gray-700">
-                Upload File PDF (opsional)
-            </label>
+                Upload File PDF
 
             <input id="file" name="file" type="file" accept="application/pdf"
-                   class="mt-1 block w-full text-sm text-gray-600 file:bg-red-500 file:text-white file:py-2 file:px-3 file:rounded-md">
+                class="mt-1 block w-full text-sm text-gray-600 file:bg-red-500 file:text-white file:py-2 file:px-3 file:rounded-md">
 
             @error('file_url') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
         </div>
+
     </div>
 
     {{-- COVER BUKU --}}
@@ -97,4 +97,27 @@
 </form>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const checkbox = document.getElementById("is_online");
+    const pdfWrapper = document.getElementById("pdfUploadWrapper");
+
+    function togglePdfField() {
+        if (checkbox.checked) {
+            pdfWrapper.classList.remove("hidden");
+        } else {
+            pdfWrapper.classList.add("hidden");
+        }
+    }
+
+    // Saat halaman pertama kali dimuat
+    togglePdfField();
+
+    // Event ketika checkbox diklik
+    checkbox.addEventListener("change", togglePdfField);
+});
+</script>
+
 @endsection
